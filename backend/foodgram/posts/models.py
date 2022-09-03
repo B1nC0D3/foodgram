@@ -36,7 +36,7 @@ class Ingredients(models.Model):
     amount = models.SmallIntegerField()
 
 
-class Recipe(models.Model):
+class Recipes(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
