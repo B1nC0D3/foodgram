@@ -1,0 +1,7 @@
+GET http://127.0.0.1:8000/api/v1/posts
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUyMjc5NTIyLCJqdGkiOiIzMDMyZDk2OGUwZjk0ZWI5YWQxZDNkNjc0YjAwMWE1MCIsInVzZXJfaWQiOjF9.vkuu1VNPJNZQIEgEGCHjOQxh2y3lApM9jCi8fI3TIyo
+Content-Type: application/json
+
+{
+    "text": "test com text",
+}
