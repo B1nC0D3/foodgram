@@ -8,5 +8,5 @@ router = DefaultRouter()
 router.register('recipes', RecipeViewSet)
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('api/', include(router.urls))
 ]

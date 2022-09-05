@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-
+from datetime import timedelta
+from dotenv import load_dotenv
 import os
 
+load_dotenv()
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +27,7 @@ SECRET_KEY = 'tv(+1ey5bkg6_&8!f4rf3#nc9jgsvp4ryp&o+40e@=r9$d1h6)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend']
 
 
 # Application definition
@@ -39,10 +41,27 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'posts.apps.PostsConfig',
     'api.apps.ApiConfig',
+    'users.apps.UsersConfig',
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
     'sorl.thumbnail',
+    'djoser',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -76,27 +95,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
-CORS_URLS_REGEX = r'^/api/.*$'
+
+
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
+    '127.0.0.1',
 ]
+CORS_URLS_REGEX = r'^/api/.*$'
+
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', 'postgres'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', 5432)
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': 'foodgram',
-    #     'USER': 'foodgram_user',
-    #     'PASSWORD': '1111',
-    #     'HOST': '127.0.0.1',
-    #     'PORT': 5432,
-    # }
 }
 
 
