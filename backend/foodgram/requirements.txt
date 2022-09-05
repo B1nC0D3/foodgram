@@ -8,6 +8,7 @@ cryptography==37.0.4
 defusedxml==0.7.1
 Django==2.2.19
 django-cors-headers==3.0.0
+django-extensions==2.0.0
 django-templated-mail==1.1.1
 djangorestframework==3.12.4
 djangorestframework-simplejwt==4.7.2
@@ -32,6 +33,7 @@ social-auth-app-django==4.0.0
 social-auth-core==4.3.0
 sorl-thumbnail==12.9.0
 sqlparse==0.4.2
+typing==3.7.4.3
 tzdata==2022.2
 uritemplate==4.1.1
 urllib3==1.26.12

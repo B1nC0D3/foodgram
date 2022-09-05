@@ -20,8 +20,7 @@ class Tags(models.Model):
 
 class Products(models.Model):
     name = models.CharField(
-        max_length=50,
-        unique=True,
+        max_length=100,
     )
     measure = models.CharField(
         max_length=10,

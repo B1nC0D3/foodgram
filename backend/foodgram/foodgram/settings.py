@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'sorl.thumbnail',
     'djoser',
+    'django_extensions',
 ]
 
 REST_FRAMEWORK = {
