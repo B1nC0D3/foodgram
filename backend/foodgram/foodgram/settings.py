@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-from datetime import timedelta
 from dotenv import load_dotenv
 import os
 
@@ -48,6 +47,7 @@ INSTALLED_APPS = [
     'sorl.thumbnail',
     'djoser',
     'django_extensions',
+    'django_filters',
 ]
 
 REST_FRAMEWORK = {
@@ -61,7 +61,9 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
-    'LOGIN_FIELD': 'email',
+    'SERIALIZERS': {
+        'token_create': 'users.serializers.TokenCreateSerializer'
+    },
 }
 
 MIDDLEWARE = [

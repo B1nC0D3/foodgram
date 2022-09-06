@@ -1,4 +1,4 @@
-GET http://127.0.0.1:8000/api/v1/posts
+GET http://localhost/api/api
 Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUyMjc5NTIyLCJqdGkiOiIzMDMyZDk2OGUwZjk0ZWI5YWQxZDNkNjc0YjAwMWE1MCIsInVzZXJfaWQiOjF9.vkuu1VNPJNZQIEgEGCHjOQxh2y3lApM9jCi8fI3TIyo
 Content-Type: application/json
 
@@ -7,11 +7,11 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost/api/users
+POST http://localhost/api/users/
 Content-Type: application/json
 
 {
-    "username": "admin",
+    "username": "asd",
     "password": "cjabz2007"
 }
 
@@ -20,6 +20,6 @@ POST http://localhost/api/auth/token/login
 Content-Type: application/json
 
 {
-    "email": "asd@asd.com",
-    "password": "Cjabz2007"
+    "username": "admin1",
+    "password": "cjabz2007"
 }

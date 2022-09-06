@@ -18,7 +18,7 @@ class Tags(models.Model):
     )
 
 
-class Products(models.Model):
+class Ingredients(models.Model):
     name = models.CharField(
         max_length=100,
     )
@@ -27,12 +27,12 @@ class Products(models.Model):
     )
 
 
-class Ingredients(models.Model):
-    ingredient = models.ForeignKey(
-        Products,
-        on_delete=models.CASCADE,
-    )
-    amount = models.SmallIntegerField()
+# class Ingredients(models.Model):
+#     ingredient = models.ForeignKey(
+#         Products,
+#         on_delete=models.CASCADE,
+#     )
+#     amount = models.SmallIntegerField()
 
 
 class Recipes(models.Model):
