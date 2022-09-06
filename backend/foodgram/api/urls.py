@@ -5,9 +5,9 @@ from api.views import RecipeViewSet, IngredientsViewSet
 app_name = 'api'
 
 router = DefaultRouter()
-router.register('recipes', RecipeViewSet)
-router.register('ingredients', IngredientsViewSet)
+#router.register('recipes', RecipeViewSet)
+router.register('ingredients', IngredientsViewSet, basename='ingredients')
 
 urlpatterns = [
-    path('api/', include(router.urls))
+    path('', include(router.urls)),
 ]

@@ -1,5 +1,5 @@
-GET http://localhost/api/api
-Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUyMjc5NTIyLCJqdGkiOiIzMDMyZDk2OGUwZjk0ZWI5YWQxZDNkNjc0YjAwMWE1MCIsInVzZXJfaWQiOjF9.vkuu1VNPJNZQIEgEGCHjOQxh2y3lApM9jCi8fI3TIyo
+GET http://localhost/api/ingredients?name=горох
+Authorization: 0e16ccedb367764507ed40fdbe44280d6b961d8e
 Content-Type: application/json
 
 {
@@ -11,8 +11,9 @@ POST http://localhost/api/users/
 Content-Type: application/json
 
 {
-    "username": "asd",
-    "password": "cjabz2007"
+    "username": "admin2",
+    "password": "cjabz2007",
+    "email": "asd@asdasd.com"
 }
 
 ###
@@ -20,6 +21,7 @@ POST http://localhost/api/auth/token/login
 Content-Type: application/json
 
 {
-    "username": "admin1",
+    "email": "asd@asd.com",
     "password": "cjabz2007"
 }
+

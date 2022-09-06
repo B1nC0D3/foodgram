@@ -1,12 +1,6 @@
 version: '3.3'
 services:
 
-  frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ../frontend/:/app/result_build/
   
   db:
     image: postgres:13.0-alpine
@@ -23,7 +17,7 @@ services:
       - static_value:/app/static/
       - media_value:/app/media/
     depends_on:
-      - frontend
+      - db
 
   nginx:
     image: nginx:1.19.3

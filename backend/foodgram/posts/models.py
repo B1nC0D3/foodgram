@@ -22,7 +22,7 @@ class Ingredients(models.Model):
     name = models.CharField(
         max_length=100,
     )
-    measure = models.CharField(
+    measurement_unit = models.CharField(
         max_length=10,
     )
 
@@ -44,7 +44,7 @@ class Recipes(models.Model):
     name = models.CharField(
         max_length=50,
     )
-    pic = models.ImageField()
+    image = models.ImageField()
     description = models.TextField()
     ingredients = models.ManyToManyField(Ingredients)
     tag = models.ManyToManyField(Tags)

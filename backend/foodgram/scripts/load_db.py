@@ -9,6 +9,6 @@ def run():
         for row in reader:
             product = Ingredients(
                 name=row[0],
-                measure=row[-1],
+                measurement_unit=row[-1],
             )
             product.save()
