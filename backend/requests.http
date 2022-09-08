@@ -7,13 +7,15 @@ Content-Type: application/json
 }
 
 ###
-POST http://127.0.0.1:8000/api/users/
+POST http://localhost/api/users/
 Content-Type: application/json
 
 {
-    "username": "admin2",
-    "password": "cjabz2007",
-    "email": "asd@asdasd.com"
+"username": "admin3",
+"password": "cjabz2007",
+"email": "email1@email1.com",
+"first_name": "Name",
+"last_name": "Surname"
 }
 
 ###
@@ -21,12 +23,12 @@ POST http://localhost/api/auth/token/login
 Content-Type: application/json
 
 {
-    "email": "asd@asd.com",
+    "email": "email1@email1.com",
     "password": "cjabz2007"
 }
 
 ###
-GET http://localhost/api/tags/
+POST http://localhost/api/tags/
 Content-Type: application/json
 
 {
@@ -36,8 +38,8 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost/api/users
-Authorization: Token cfdd70ed4d6ccb03ba9cc6620dd2d89c087f8504
+GET http://localhost/api/users/
+Authorization: Token 841bc3401f565ec57832441b64d7de3c3787c92d
 
 ###
-GET http://localhost/api/recipes/4
+GET http://localhost/api/recipes/

@@ -1,14 +1,14 @@
 from rest_framework import viewsets, permissions, filters
 from posts.models import Recipes, Ingredients, Tags
 from api import serializers
-from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipes.objects.all()
     serializer_class = serializers.RecipesSerializer
-    pagination_class = LimitOffsetPagination
+    pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('tags__name',)
     permission_classes = (permissions.AllowAny,)

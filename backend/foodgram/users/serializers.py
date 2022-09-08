@@ -1,8 +1,14 @@
 from rest_framework import serializers
-from django.contrib.auth import get_user_model, authenticate
+from django.contrib.auth import authenticate
 from djoser.conf import settings
+from users.models import User
+from djoser.serializers import UserSerializer
 
-User = get_user_model()
+class CustomUserSerializer(UserSerializer):
+    class Meta:
+        fields = ('id', 'email', 'username', 'first_name', 'last_name')
+        model = User
+
 
 class TokenCreateSerializer(serializers.Serializer):
     password = serializers.CharField(required=False, style={"input_type": "password"})

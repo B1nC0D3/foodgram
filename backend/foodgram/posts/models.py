@@ -1,7 +1,5 @@
-from django.contrib.auth import get_user_model
 from django.db import models
-
-User = get_user_model()
+from users.models import User
 
 
 class Tags(models.Model):
@@ -47,6 +45,7 @@ class Recipes(models.Model):
 class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(Ingredients, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
+    amount = models.PositiveSmallIntegerField()
 
 
 class TagRecipe(models.Model):
