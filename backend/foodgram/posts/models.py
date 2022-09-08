@@ -7,32 +7,25 @@ User = get_user_model()
 class Tags(models.Model):
     name = models.CharField(
         unique=True,
-        max_length=50,
+        max_length=200,
         )
     color = models.CharField(
         unique=True,
-        max_length=6,
+        max_length=7,
     )
     slug = models.SlugField(
         unique=True,
+        max_length=200,
     )
 
 
 class Ingredients(models.Model):
     name = models.CharField(
-        max_length=100,
+        max_length=200,
     )
     measurement_unit = models.CharField(
-        max_length=10,
+        max_length=200,
     )
-
-
-# class Ingredients(models.Model):
-#     ingredient = models.ForeignKey(
-#         Products,
-#         on_delete=models.CASCADE,
-#     )
-#     amount = models.SmallIntegerField()
 
 
 class Recipes(models.Model):
@@ -42,10 +35,20 @@ class Recipes(models.Model):
         related_name='recipe'
     )
     name = models.CharField(
-        max_length=50,
+        max_length=200,
     )
-    image = models.ImageField()
-    description = models.TextField()
-    ingredients = models.ManyToManyField(Ingredients)
-    tag = models.ManyToManyField(Tags)
-    cooking_time = models.IntegerField()
+    image = models.ImageField(upload_to='recipes/images/')
+    text = models.TextField()
+    ingredients = models.ManyToManyField(Ingredients, through='RecipeIngredient')
+    tags = models.ManyToManyField(Tags, through='TagRecipe')
+    cooking_time = models.PositiveIntegerField()
+
+
+class RecipeIngredient(models.Model):
+    ingredient = models.ForeignKey(Ingredients, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
+
+
+class TagRecipe(models.Model):
+    tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)

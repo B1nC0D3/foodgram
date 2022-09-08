@@ -1,4 +1,4 @@
-GET http://localhost/api/ingredients?name=горох
+GET http://localhost/api/ingredients
 Authorization: 0e16ccedb367764507ed40fdbe44280d6b961d8e
 Content-Type: application/json
 
@@ -7,7 +7,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost/api/users/
+POST http://127.0.0.1:8000/api/users/
 Content-Type: application/json
 
 {
@@ -25,3 +25,19 @@ Content-Type: application/json
     "password": "cjabz2007"
 }
 
+###
+GET http://localhost/api/tags/
+Content-Type: application/json
+
+{
+    "name": "asdasd",
+    "color": "#222222",
+    "slug": "asdasd"
+}
+
+###
+GET http://localhost/api/users
+Authorization: Token cfdd70ed4d6ccb03ba9cc6620dd2d89c087f8504
+
+###
+GET http://localhost/api/recipes/4
