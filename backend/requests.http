@@ -28,13 +28,13 @@ Content-Type: application/json
 }
 
 ###
-POST http://127.0.0.1:8000/api/tags/
+GET http://127.0.0.1:8000/api/tags/
 Content-Type: application/json
 
 {
-    "name": "sss",
-    "color": "#3ef542",
-    "slug": "sss"
+    "name": "green",
+    "color": "#2ef542",
+    "slug": "green"
 }
 
 ###
@@ -42,8 +42,7 @@ GET http://localhost/api/users/
 Authorization: Token 841bc3401f565ec57832441b64d7de3c3787c92d
 
 ###
-GET http://127.0.0.1:8000/api/recipes/11
-
+DELETE http://127.0.0.1:8000/api/recipes/2
 
 ###
 POST http://127.0.0.1:8000/api/recipes/
@@ -52,7 +51,7 @@ Content-Type: application/json
 
 {
     "name": "recipe#2",
-    "tags": [1, 2],
+    "tags": [3],
     "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
     "text": "text#2",
     "ingredients": [

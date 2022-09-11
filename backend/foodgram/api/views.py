@@ -2,25 +2,29 @@ from rest_framework import viewsets, permissions, filters
 from posts.models import Recipes, Ingredients, Tags
 from api import serializers
 from rest_framework.pagination import PageNumberPagination
+from api.filters import RecipeFilter
 from django_filters.rest_framework import DjangoFilterBackend
+
+GET_REQUESTS = ['retrieve', 'list', 'destoy']
+
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipes.objects.all()
     pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
-    filterset_fields = ('tags__name',)
+    filterset_class = RecipeFilter
     permission_classes = (permissions.AllowAny,)
 
     def get_serializer_class(self):
-        if self.action == 'retrieve':
+        if self.action in GET_REQUESTS:
             return serializers.GETRecipesSerializer
         else:
             return serializers.POSTRecipesSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
+    
 
 class IngredientsViewSet(viewsets.ModelViewSet):
     queryset = Ingredients.objects.all()
