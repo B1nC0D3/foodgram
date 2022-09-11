@@ -42,7 +42,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://127.0.0.1:8000/api/recipes/2
+GET http://127.0.0.1:8000/api/recipes?tags=assdasd&tags=green
 
 ###
 POST http://127.0.0.1:8000/api/recipes/
