@@ -7,23 +7,27 @@ Content-Type: application/json
 }
 
 ###
-POST http://127.0.0.1:8000/api/users/
+GET http://127.0.0.1:8000/api/users/
 Content-Type: application/json
 
 {
-"username": "admin3",
+"username": "adm1in31111111",
 "password": "cjabz2007",
-"email": "email1@email1.com",
+"email": "email111111111@email1.com",
 "first_name": "Name",
 "last_name": "Surname"
 }
+
+###
+GET http://127.0.0.1:8000/api/users
+Authorization: Token 5ad7cbfdac474edfb7dd77299445019d13b2dbaa
 
 ###
 POST http://127.0.0.1:8000/api/auth/token/login
 Content-Type: application/json
 
 {
-    "email": "email1@email1.com",
+    "email": "b1nc0d3@asd.com",
     "password": "cjabz2007"
 }
 
@@ -36,10 +40,6 @@ Content-Type: application/json
     "color": "#2ef542",
     "slug": "green"
 }
-
-###
-GET http://localhost/api/users/
-Authorization: Token 841bc3401f565ec57832441b64d7de3c3787c92d
 
 ###
 DELETE http://127.0.0.1:8000/api/recipes/2

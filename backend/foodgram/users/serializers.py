@@ -1,8 +1,10 @@
 from rest_framework import serializers
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from djoser.conf import settings
-from users.models import User
-from djoser.serializers import UserSerializer
+from djoser.serializers import UserSerializer, UserCreateSerializer
+
+
+User = get_user_model()
 
 class CustomUserSerializer(UserSerializer):
     class Meta:
@@ -32,3 +34,15 @@ class TokenCreateSerializer(serializers.Serializer):
         if not self.user:
             self.fail("invalid_credentials")
         return attrs
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    class Meta:
+        fields = tuple(User.REQUIRED_FIELDS) + (
+            settings.LOGIN_FIELD,
+            settings.USER_ID_FIELD,
+            "password",
+            'first_name',
+            'last_name'
+        )
+        model = User
