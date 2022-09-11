@@ -1,4 +1,4 @@
-GET http://localhost/api/ingredients
+GET http://127.0.0.1:8000/api/ingredients
 Authorization: 0e16ccedb367764507ed40fdbe44280d6b961d8e
 Content-Type: application/json
 
@@ -7,7 +7,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost/api/users/
+POST http://127.0.0.1:8000/api/users/
 Content-Type: application/json
 
 {
@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost/api/auth/token/login
+POST http://127.0.0.1:8000/api/auth/token/login
 Content-Type: application/json
 
 {
@@ -28,13 +28,13 @@ Content-Type: application/json
 }
 
 ###
-POST http://localhost/api/tags/
+POST http://127.0.0.1:8000/api/tags/
 Content-Type: application/json
 
 {
-    "name": "asdasd",
-    "color": "#222222",
-    "slug": "asdasd"
+    "name": "sss",
+    "color": "#3ef542",
+    "slug": "sss"
 }
 
 ###
@@ -42,4 +42,48 @@ GET http://localhost/api/users/
 Authorization: Token 841bc3401f565ec57832441b64d7de3c3787c92d
 
 ###
-GET http://localhost/api/recipes/
+GET http://127.0.0.1:8000/api/recipes/11
+
+
+###
+POST http://127.0.0.1:8000/api/recipes/
+Authorization: Token 359fd5ffae4a709644f83718d95872323078e403
+Content-Type: application/json
+
+{
+    "name": "recipe#2",
+    "tags": [1, 2],
+    "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
+    "text": "text#2",
+    "ingredients": [
+        {
+        "id": 1123,
+        "amount": 20
+        },
+        {"id": 1111,
+         "amount": 1
+         }
+        ],
+    "cooking_time": 100
+        }
+
+###
+PATCH http://127.0.0.1:8000/api/recipes/11/
+Content-Type: application/json
+
+{
+    "name": "edited recipe#2",
+    "tags": [2],
+    "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
+    "text": "edited text#2",
+    "ingredients": [
+        {
+        "id": 1123,
+        "amount": 20
+        },
+        {"id": 1110,
+         "amount": 10
+         }
+        ],
+    "cooking_time": 100
+        }

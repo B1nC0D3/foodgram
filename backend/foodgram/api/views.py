@@ -1,17 +1,22 @@
 from rest_framework import viewsets, permissions, filters
 from posts.models import Recipes, Ingredients, Tags
 from api import serializers
-from rest_framework.pagination import LimitOffsetPagination, PageNumberPagination
+from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipes.objects.all()
-    serializer_class = serializers.RecipesSerializer
     pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('tags__name',)
     permission_classes = (permissions.AllowAny,)
+
+    def get_serializer_class(self):
+        if self.action == 'retrieve':
+            return serializers.GETRecipesSerializer
+        else:
+            return serializers.POSTRecipesSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
