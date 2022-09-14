@@ -26,9 +26,11 @@ class TokenCreateSerializer(serializers.Serializer):
         self.fields['email'] = serializers.CharField(required=False)
 
     def validate(self, attrs):
-        username = User.objects.get(email=attrs.get('email')).username
+        if not User.objects.filter(email=attrs.get('email')).exists():
+            self.fail('invalid_credentials')
+        username = User.objects.get(email=attrs.get('email'))
         self.user = authenticate(
-            username=username, password=attrs.get("password")
+            username=username.username, password=attrs.get("password")
         )
 
         if not self.user:

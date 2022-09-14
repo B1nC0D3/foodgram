@@ -25,7 +25,7 @@ SECRET_KEY = 'tv(+1ey5bkg6_&8!f4rf3#nc9jgsvp4ryp&o+40e@=r9$d1h6)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend', 'http://localhost:3000', 'backend:8000', 'backend:3000']
 
 
 # Application definition
@@ -58,17 +58,23 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'SEARCH_PARAM': 'name',
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 6,
 }
 
 
 
 DJOSER = {
+    'HIDE_USERS': False,
     'SERIALIZERS': {
         'token_create': 'users.serializers.TokenCreateSerializer',
         'user': 'users.serializers.CustomUserSerializer',
         'current_user': 'users.serializers.CustomUserSerializer',
         'user_create': 'users.serializers.CustomUserCreateSerializer',
+    },
+    'PERMISSIONS': {
+        'user': ['rest_framework.permissions.IsAuthenticated'],
+        'user_list': ['rest_framework.permissions.AllowAny'],
     },
 }
 
@@ -105,12 +111,13 @@ TEMPLATES = [
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 
-
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    '127.0.0.1',
-]
-CORS_URLS_REGEX = r'^/api/.*$'
+CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOWED_ORIGINS = [
+#     'http://localhost:3000',
+#     '127.0.0.1',
+# ]
+# CORS_URLS_REGEX = r'^/api/.*$'
+CORS_URLS_REGEX = ''
 
 
 # Database

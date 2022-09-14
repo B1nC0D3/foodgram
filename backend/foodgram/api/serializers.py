@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from posts.models import Recipes, Ingredients, Tags, RecipeIngredient, TagRecipe
+from posts.models import Recipes, Ingredients, Tags, RecipeIngredient, TagRecipe, Favorite
 import base64
 from django.core.files.base import ContentFile
 from users.serializers import CustomUserSerializer
-
+from foodgram.settings import MEDIA_URL
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=Ingredients.objects.all())
@@ -11,6 +11,16 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
         
         fields = ('id', 'amount')
         model = RecipeIngredient
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    is_favorite = serializers.SerializerMethodField()
+    class Meta:
+        fields = ('is_favorite',)
+        model = Favorite
+
+    def get_is_favorite(self, obj):
+        print(obj, '==========================')
 
 
 class GETIngredientRecipeSerializer(serializers.ModelSerializer):
@@ -46,10 +56,27 @@ class Base64ImageField(serializers.ImageField):
 
 
 class GETRecipesSerializer(serializers.ModelSerializer):
+    is_favorite = FavoriteSerializer(default=False)
     author = CustomUserSerializer(read_only=True)
-    image = Base64ImageField()
+    image = serializers.SerializerMethodField()
     ingredients = GETIngredientRecipeSerializer(source='amount', many=True)
     tags = TagsSerializer(many=True, read_only=True)
+    class Meta:
+        fields = (
+            'id', 'author', 'name', 'image',
+            'text', 'ingredients',
+            'tags', 'cooking_time', 'is_favorite'
+            )
+        model = Recipes
+
+    def get_image(self, obj):
+        return f'{MEDIA_URL}{obj.image}'
+
+class POSTRecipesSerializer(GETRecipesSerializer):
+    tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tags.objects.all())
+    ingredients = IngredientRecipeSerializer(source='amount', many=True)
+    image = Base64ImageField()
+
     class Meta:
         fields = (
             'id', 'author', 'name', 'image',
@@ -57,11 +84,6 @@ class GETRecipesSerializer(serializers.ModelSerializer):
             'tags', 'cooking_time'
             )
         model = Recipes
-
-
-class POSTRecipesSerializer(GETRecipesSerializer):
-    tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tags.objects.all())
-    ingredients = IngredientRecipeSerializer(source='amount', many=True)
 
     def create(self, validated_data):
         tags = validated_data.pop('tags')
@@ -87,3 +109,4 @@ class POSTRecipesSerializer(GETRecipesSerializer):
         for ingredient in ingredients:
             RecipeIngredient.objects.create(ingredient=ingredient['id'], amount=ingredient['amount'], recipe=instance)
         return instance
+

@@ -11,7 +11,6 @@ GET_REQUESTS = ['retrieve', 'list', 'destoy']
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipes.objects.all()
-    pagination_class = PageNumberPagination
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
     permission_classes = (permissions.AllowAny,)
@@ -29,6 +28,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 class IngredientsViewSet(viewsets.ModelViewSet):
     queryset = Ingredients.objects.all()
     serializer_class = serializers.IngredientsSerializer
+    pagination_class = None
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
     permission_classes = (permissions.AllowAny,)
@@ -37,4 +37,5 @@ class IngredientsViewSet(viewsets.ModelViewSet):
 class TagsViewSet(viewsets.ModelViewSet):
     queryset = Tags.objects.all()
     serializer_class = serializers.TagsSerializer
+    pagination_class = None
     permission_classes = (permissions.AllowAny,)

@@ -7,32 +7,32 @@ Content-Type: application/json
 }
 
 ###
-GET http://127.0.0.1:8000/api/users/
+POST http://localhost/api/users/
 Content-Type: application/json
 
 {
-"username": "adm1in31111111",
+"username": "adm1i11111",
 "password": "cjabz2007",
-"email": "email111111111@email1.com",
+"email": "email1111111111111@email1.com",
 "first_name": "Name",
 "last_name": "Surname"
 }
 
 ###
-GET http://127.0.0.1:8000/api/users
-Authorization: Token 5ad7cbfdac474edfb7dd77299445019d13b2dbaa
+GET http://localhost/api/users/me
+Authorization: Token ad1605a6182d432adb1ce07b63d11baad4cdc46b
 
 ###
-POST http://127.0.0.1:8000/api/auth/token/login
+POST http://localhost/api/auth/token/login
 Content-Type: application/json
 
 {
-    "email": "b1nc0d3@asd.com",
+    "email": "asd@asd.com",
     "password": "cjabz2007"
 }
 
 ###
-GET http://127.0.0.1:8000/api/tags/
+GET http://localhost/api/tags/
 Content-Type: application/json
 
 {
@@ -42,16 +42,16 @@ Content-Type: application/json
 }
 
 ###
-GET http://127.0.0.1:8000/api/recipes?tags=assdasd&tags=green
+GET http://localhost/api/recipes/4
 
 ###
 POST http://127.0.0.1:8000/api/recipes/
-Authorization: Token 359fd5ffae4a709644f83718d95872323078e403
+Authorization: Token 386e8f35e3b74f3e7a1f3fc194e021601c0df8e8
 Content-Type: application/json
 
 {
-    "name": "recipe#2",
-    "tags": [3],
+    "name": "test pic",
+    "tags": [1],
     "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
     "text": "text#2",
     "ingredients": [
