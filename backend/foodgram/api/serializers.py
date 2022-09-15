@@ -4,6 +4,9 @@ import base64
 from django.core.files.base import ContentFile
 from users.serializers import CustomUserSerializer
 from foodgram.settings import MEDIA_URL
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=Ingredients.objects.all())
@@ -14,13 +17,10 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
-    is_favorite = serializers.SerializerMethodField()
     class Meta:
-        fields = ('is_favorite',)
+        fields = ('',)
         model = Favorite
 
-    def get_is_favorite(self, obj):
-        print(obj, '==========================')
 
 
 class GETIngredientRecipeSerializer(serializers.ModelSerializer):
@@ -56,7 +56,7 @@ class Base64ImageField(serializers.ImageField):
 
 
 class GETRecipesSerializer(serializers.ModelSerializer):
-    is_favorite = FavoriteSerializer(default=False)
+    is_favorited = serializers.SerializerMethodField()
     author = CustomUserSerializer(read_only=True)
     image = serializers.SerializerMethodField()
     ingredients = GETIngredientRecipeSerializer(source='amount', many=True)
@@ -65,12 +65,17 @@ class GETRecipesSerializer(serializers.ModelSerializer):
         fields = (
             'id', 'author', 'name', 'image',
             'text', 'ingredients',
-            'tags', 'cooking_time', 'is_favorite'
+            'tags', 'cooking_time', 'is_favorited'
             )
         model = Recipes
 
     def get_image(self, obj):
         return f'{MEDIA_URL}{obj.image}'
+
+    def get_is_favorited(self, obj):
+        user = self.context.get('request').user
+        return Favorite.objects.filter(recipe=obj, user=user).exists()
+
 
 class POSTRecipesSerializer(GETRecipesSerializer):
     tags = serializers.PrimaryKeyRelatedField(many=True, queryset=Tags.objects.all())
@@ -110,3 +115,12 @@ class POSTRecipesSerializer(GETRecipesSerializer):
             RecipeIngredient.objects.create(ingredient=ingredient['id'], amount=ingredient['amount'], recipe=instance)
         return instance
 
+
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    name = serializers.ReadOnlyField(source='recipe.name')
+    image = serializers.ImageField(source='recipe.image')
+    cooking_time = serializers.ReadOnlyField(source='recipe.cooking_time')
+    class Meta:
+        fields = ('id', 'name', 'image', 'cooking_time')
+        model = Favorite
