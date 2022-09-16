@@ -2,15 +2,19 @@ from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
 from djoser.conf import settings
 from djoser.serializers import UserSerializer, UserCreateSerializer
-
+from posts.models import Subscribe
 
 User = get_user_model()
 
 class CustomUserSerializer(UserSerializer):
+    is_subscribed = serializers.SerializerMethodField()
     class Meta:
-        fields = ('id', 'email', 'username', 'first_name', 'last_name')
+        fields = ('id', 'email', 'username', 'first_name', 'last_name', 'is_subscribed')
         model = User
 
+    def get_is_subscribed(self, obj):
+        user = self.context.get('request').user
+        return Subscribe.objects.filter(author=obj, follower=user).exists()
 
 class TokenCreateSerializer(serializers.Serializer):
     password = serializers.CharField(required=False, style={"input_type": "password"})

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from posts.models import Recipes, Ingredients, Tags, RecipeIngredient, TagRecipe, Favorite
+from posts.models import Recipes, Ingredients, Tags, RecipeIngredient, TagRecipe, Favorite, Subscribe
 import base64
 from django.core.files.base import ContentFile
 from users.serializers import CustomUserSerializer
@@ -14,12 +14,6 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
         
         fields = ('id', 'amount')
         model = RecipeIngredient
-
-
-class FavoriteSerializer(serializers.ModelSerializer):
-    class Meta:
-        fields = ('',)
-        model = Favorite
 
 
 
@@ -124,3 +118,35 @@ class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ('id', 'name', 'image', 'cooking_time')
         model = Favorite
+
+
+class SubscribeRecipeSerializer(serializers.ModelSerializer):
+    class Meta:
+        fields = ('id', 'name', 'image', 'cooking_time')
+        model = Recipes
+
+class SubscribeSerializer(serializers.ModelSerializer):
+    email = serializers.ReadOnlyField(source='author.email')
+    username = serializers.ReadOnlyField(source='author.username')
+    first_name = serializers.ReadOnlyField(source='author.first_name')
+    last_name = serializers.ReadOnlyField(source='author.last_name')
+    is_subscribed = serializers.SerializerMethodField()
+    recipes = serializers.SerializerMethodField()
+    recipes_count = serializers.SerializerMethodField()
+
+    class Meta:
+        fields = ('email', 'id', 'username', 
+                  'first_name', 'last_name',
+                  'is_subscribed', 'recipes', 'recipes_count')
+        model = Subscribe
+    
+    def get_is_subscribed(self, obj):
+        return Subscribe.objects.filter(author=obj.author, follower=obj.follower).exists()
+
+    def get_recipes_count(self, obj):
+        return Recipes.objects.filter(author=obj.author).count()
+
+    def get_recipes(self, obj):
+        recipes = Recipes.objects.filter(author=obj.author)
+        serializer = SubscribeRecipeSerializer(recipes, many=True)
+        return serializer.data

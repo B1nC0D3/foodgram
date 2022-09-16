@@ -23,6 +23,10 @@ GET http://127.0.0.1:8000/api/users/me
 Authorization: Token e9bd23e45d15a293b9f278cf5c9de90f737fe4b4
 
 ###
+POST http://localhost/api/users/1/subscribe/
+Authorization: Token ad1605a6182d432adb1ce07b63d11baad4cdc46b
+
+###
 POST http://127.0.0.1:8000/api/auth/token/login
 Content-Type: application/json
 

@@ -42,10 +42,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def favorite(self, request, pk=None):
         recipe = Recipes.objects.get(id=pk)
         if request.method == 'POST':
-            serializer, status = self._create_favorite(recipe, request)
-            return Response(serializer, status=status)
-        serializer, status = self._delete_favorite(recipe, request)
-        return Response(serializer, status=status)
+            data, status = self._create_favorite(recipe, request)
+            return Response(data, status=status)
+        data, status = self._delete_favorite(recipe, request)
+        return Response(data, status=status)
         
         
 
