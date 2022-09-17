@@ -34,12 +34,14 @@ class CustomUserViewSet(UserViewSet):
         data, status = self._delete_subscribe(author, request)
         return Response(data, status=status)
     
-    @action(methods=('GET',), detail=False, pagination_class=PageNumberPagination)
+    @action(methods=('GET',), detail=False)
     def subscriptions(self, request):
         subs = Subscribe.objects.filter(follower=request.user)
         page = self.paginate_queryset(subs)
         if page is not None:
+            print(page)
             serializer = serializers.SubscribeSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = serializers.SubscribeSerializer(subs, many=True)
+        
         return Response(serializer.data, status=status.HTTP_200_OK)

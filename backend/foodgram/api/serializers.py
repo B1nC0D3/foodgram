@@ -127,6 +127,7 @@ class SubscribeRecipeSerializer(serializers.ModelSerializer):
 
 class SubscribeSerializer(serializers.ModelSerializer):
     email = serializers.ReadOnlyField(source='author.email')
+    id = serializers.ReadOnlyField(source='author.id')
     username = serializers.ReadOnlyField(source='author.username')
     first_name = serializers.ReadOnlyField(source='author.first_name')
     last_name = serializers.ReadOnlyField(source='author.last_name')
@@ -147,6 +148,6 @@ class SubscribeSerializer(serializers.ModelSerializer):
         return Recipes.objects.filter(author=obj.author).count()
 
     def get_recipes(self, obj):
-        recipes = Recipes.objects.filter(author=obj.author)
+        recipes = Recipes.objects.filter(author=obj.author)[:3]
         serializer = SubscribeRecipeSerializer(recipes, many=True)
         return serializer.data

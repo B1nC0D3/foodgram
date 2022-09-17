@@ -19,12 +19,12 @@ Content-Type: application/json
 }
 
 ###
-GET http://127.0.0.1:8000/api/users/me
-Authorization: Token e9bd23e45d15a293b9f278cf5c9de90f737fe4b4
+GET http://localhost/api/users/me
+Authorization: Token ad1605a6182d432adb1ce07b63d11baad4cdc46b
 
 ###
-POST http://localhost/api/users/1/subscribe/
-Authorization: Token ad1605a6182d432adb1ce07b63d11baad4cdc46b
+GET http://127.0.0.1:8000/api/users/subscriptions
+Authorization: Token e9bd23e45d15a293b9f278cf5c9de90f737fe4b4
 
 ###
 POST http://127.0.0.1:8000/api/auth/token/login
@@ -36,7 +36,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost/api/tags/
+POST http://localhost/api/tags/
 Content-Type: application/json
 
 {
@@ -46,7 +46,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://127.0.0.1:8000/api/recipes?is_favorited=1
+GET http://127.0.0.1:8000/api/recipes
 Authorization: Token e9bd23e45d15a293b9f278cf5c9de90f737fe4b4
 
 ###
@@ -59,7 +59,7 @@ Authorization: Token 386e8f35e3b74f3e7a1f3fc194e021601c0df8e8
 Content-Type: application/json
 
 {
-    "name": "test pic",
+    "name": "5",
     "tags": [1],
     "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
     "text": "text#2",

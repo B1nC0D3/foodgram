@@ -3,16 +3,7 @@ import django_filters
 
 
 class RecipeFilter(django_filters.FilterSet):
-
-    def _get_choices():
-        tags = Tags.objects.all()
-        result = []
-        for tag in tags:
-            result.append((tag.name, tag.name))
-        return result
-            
-
-    tags = django_filters.MultipleChoiceFilter(field_name='tags__name', choices=_get_choices())
+    tags = django_filters.MultipleChoiceFilter(field_name='tags__name', choices='get_choices')
     is_favorited = django_filters.NumberFilter(field_name='is_favorited', method='get_is_favorited')
     class Meta:
         model = Recipes
@@ -26,6 +17,12 @@ class RecipeFilter(django_filters.FilterSet):
                 remove_recipes.append(recipe.id)
         return Recipes.objects.exclude(id__in=remove_recipes)
             
+    def get_choices():
+        tags = Tags.objects.all()
+        result = []
+        for tag in tags:
+            result.append((tag.name, tag.name))
+        return result
 
     
 
