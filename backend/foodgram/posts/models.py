@@ -4,7 +4,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class Tags(models.Model):
+class Tag(models.Model):
     name = models.CharField(
         unique=True,
         max_length=200,
@@ -18,8 +18,10 @@ class Tags(models.Model):
         max_length=200,
     )
 
+    def __str__(self) -> str:
+        return self.name
 
-class Ingredients(models.Model):
+class Ingredient(models.Model):
     name = models.CharField(
         max_length=200,
     )
@@ -27,8 +29,11 @@ class Ingredients(models.Model):
         max_length=200,
     )
 
+    def __str__(self) -> str:
+        return self.name
 
-class Recipes(models.Model):
+
+class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -39,24 +44,27 @@ class Recipes(models.Model):
     )
     image = models.ImageField(upload_to='recipes/images/')
     text = models.TextField()
-    ingredients = models.ManyToManyField(Ingredients, through='RecipeIngredient')
-    tags = models.ManyToManyField(Tags, through='TagRecipe')
+    ingredients = models.ManyToManyField(Ingredient, through='RecipeIngredient')
+    tags = models.ManyToManyField(Tag, through='TagRecipe')
     cooking_time = models.PositiveIntegerField()
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class RecipeIngredient(models.Model):
-    ingredient = models.ForeignKey(Ingredients, on_delete=models.CASCADE, related_name='amount')
-    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE, related_name='amount')
+    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='amount')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='amount')
     amount = models.PositiveSmallIntegerField()
 
 
 class TagRecipe(models.Model):
-    tag = models.ForeignKey(Tags, on_delete=models.CASCADE)
-    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE)
+    tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='recipe_tag')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
 
 class Favorite(models.Model):
-    recipe = models.ForeignKey(Recipes, on_delete=models.CASCADE, related_name='recipe')
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='recipe')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     class Meta:
         unique_together = ('recipe', 'user')
@@ -67,3 +75,9 @@ class Subscribe(models.Model):
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
     class Meta:
         unique_together = ('author', 'follower')
+
+class Shopping_cart(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='shop_recipe')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shop_user')
+    class Meta:
+        unique_together = ('recipe', 'user')

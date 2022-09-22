@@ -14,6 +14,8 @@ class CustomUserSerializer(UserSerializer):
 
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user
+        if not user.is_authenticated:
+            return False
         return Subscribe.objects.filter(author=obj, follower=user).exists()
 
 class TokenCreateSerializer(serializers.Serializer):

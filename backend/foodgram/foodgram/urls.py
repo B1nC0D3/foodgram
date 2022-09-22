@@ -15,9 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from foodgram import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('api/', include('api.urls', namespace='api')),
     path('api/', include('users.urls', namespace='users')),
     path('admin/', admin.site.urls),
 ]
+
+if settings.DEBUG == True:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

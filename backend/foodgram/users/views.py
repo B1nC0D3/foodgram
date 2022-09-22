@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from posts.models import Subscribe
 from rest_framework import status
 from api import serializers
-from rest_framework.pagination import PageNumberPagination
+
 
 User = get_user_model()
 

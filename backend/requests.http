@@ -50,6 +50,10 @@ GET http://127.0.0.1:8000/api/recipes
 Authorization: Token e9bd23e45d15a293b9f278cf5c9de90f737fe4b4
 
 ###
+POST http://127.0.0.1:8000/api/recipes/2/shopping_cart/
+Authorization: Token e9bd23e45d15a293b9f278cf5c9de90f737fe4b4
+
+###
 POST http://127.0.0.1:8000/api/recipes/1/favorite/
 Authorization: Token e9bd23e45d15a293b9f278cf5c9de90f737fe4b4
 
@@ -95,3 +99,6 @@ Content-Type: application/json
         ],
     "cooking_time": 100
         }
+
+###
+GET  http://localhost/admin
