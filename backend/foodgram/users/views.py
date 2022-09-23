@@ -1,14 +1,14 @@
-from djoser.views import UserViewSet
-from rest_framework.decorators import action
+from api import serializers
 from django.contrib.auth import get_user_model
-from rest_framework.response import Response
+from djoser.views import UserViewSet
 from posts.models import Subscribe
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
-from api import serializers
-
+from rest_framework.response import Response
 
 User = get_user_model()
+
 
 class CustomUserViewSet(UserViewSet):
     def _create_subsribe(self, author, request):
@@ -24,7 +24,6 @@ class CustomUserViewSet(UserViewSet):
         Subscribe.objects.get(author=author, follower=request.user).delete()
         return None, status.HTTP_204_NO_CONTENT
 
-
     @action(methods=('POST', 'DELETE'), detail=True, permission_classes=(IsAuthenticated,))
     def subscribe(self, request, id=None):
         author = User.objects.get(id=id)
@@ -33,7 +32,7 @@ class CustomUserViewSet(UserViewSet):
             return Response(data, status=status)
         data, status = self._delete_subscribe(author, request)
         return Response(data, status=status)
-    
+
     @action(methods=('GET',), detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request):
         subs = Subscribe.objects.filter(follower=request.user)
@@ -43,5 +42,5 @@ class CustomUserViewSet(UserViewSet):
             serializer = serializers.SubscribeSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = serializers.SubscribeSerializer(subs, many=True)
-        
+
         return Response(serializer.data, status=status.HTTP_200_OK)

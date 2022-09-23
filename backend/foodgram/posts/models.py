@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 User = get_user_model()
 
@@ -20,6 +20,7 @@ class Tag(models.Model):
 
     def __str__(self) -> str:
         return self.name
+
 
 class Ingredient(models.Model):
     name = models.CharField(
@@ -66,6 +67,7 @@ class TagRecipe(models.Model):
 class Favorite(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='recipe')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+
     class Meta:
         unique_together = ('recipe', 'user')
 
@@ -73,11 +75,14 @@ class Favorite(models.Model):
 class Subscribe(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
     follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='follower')
+
     class Meta:
         unique_together = ('author', 'follower')
+
 
 class Shopping_cart(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='shop_recipe')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shop_user')
+
     class Meta:
         unique_together = ('recipe', 'user')

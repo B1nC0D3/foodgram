@@ -1,6 +1,7 @@
 from django.contrib import admin
-from users.models import User
 from django.contrib.auth.models import Permission
+from users.models import User
+
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ('id', 'username', 'email', 'get_group')
@@ -12,5 +13,5 @@ class UserAdmin(admin.ModelAdmin):
             result.append(group.name)
         return result
 
-admin.site.register(User, UserAdmin)
 
+admin.site.register(User, UserAdmin)

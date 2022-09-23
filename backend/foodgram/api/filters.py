@@ -1,5 +1,5 @@
-from posts.models import Recipe, Tag
 import django_filters
+from posts.models import Recipe, Tag
 
 
 def _get_choices():
@@ -12,10 +12,15 @@ def _get_choices():
     except Exception:
         return (None, None)
 
+
 class RecipeFilter(django_filters.FilterSet):
-    tags = django_filters.MultipleChoiceFilter(field_name='tags__name', choices=_get_choices())
-    is_favorited = django_filters.NumberFilter(field_name='is_favorited', method='get_is_favorited')
-    is_in_shopping_cart = django_filters.NumberFilter(field_name='is_in_shopping_cart', method='get_is_in_shopping_cart')
+    tags = django_filters.MultipleChoiceFilter(
+        field_name='tags__name', choices=_get_choices())
+    is_favorited = django_filters.NumberFilter(
+        field_name='is_favorited', method='get_is_favorited')
+    is_in_shopping_cart = django_filters.NumberFilter(
+        field_name='is_in_shopping_cart', method='get_is_in_shopping_cart')
+
     class Meta:
         model = Recipe
         fields = ('tags', 'author', 'is_favorited')
@@ -27,7 +32,7 @@ class RecipeFilter(django_filters.FilterSet):
             if len(check_fav) == 0:
                 remove_recipes.append(recipe.id)
         return Recipe.objects.exclude(id__in=remove_recipes)
-    
+
     def get_is_in_shopping_cart(self, queryset, name, value):
         remove_recipes = []
         for recipe in queryset:
@@ -35,4 +40,3 @@ class RecipeFilter(django_filters.FilterSet):
             if len(check_in_cart) == 0:
                 remove_recipes.append(recipe.id)
         return Recipe.objects.exclude(id__in=remove_recipes)
-    

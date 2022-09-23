@@ -1,5 +1,6 @@
 from django.contrib import admin
-from posts.models import Recipe, Ingredient, Tag, RecipeIngredient, TagRecipe, Favorite, Subscribe
+from posts.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                          Subscribe, Tag, TagRecipe)
 
 
 class IngredientInline(admin.TabularInline):
@@ -10,6 +11,7 @@ class IngredientInline(admin.TabularInline):
 class TagInline(admin.TabularInline):
     model = TagRecipe
     extra = 1
+
 
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (IngredientInline, TagInline)
@@ -27,6 +29,7 @@ class RecipeAdmin(admin.ModelAdmin):
     def favorite_count(self, obj):
         return Favorite.objects.filter(recipe=obj).count()
 
+
 class TagAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
 
@@ -38,7 +41,6 @@ class IngredientAdmin(admin.ModelAdmin):
 
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('recipe', 'user')
-    
 
 
 class SubscribeAdmin(admin.ModelAdmin):

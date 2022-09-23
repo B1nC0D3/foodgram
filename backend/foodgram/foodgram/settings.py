@@ -9,8 +9,9 @@ https://docs.djangoproject.com/en/2.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
-from dotenv import load_dotenv
 import os
+
+from dotenv import load_dotenv
 
 load_dotenv(dotenv_path='infra/.env')
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -23,11 +24,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'backend', 'http://localhost:3000', 'backend:8000', 'backend:3000', 'http://localhost']
+ALLOWED_HOSTS = [
+    'localhost', '127.0.0.1', 'backend',
+    'http://localhost:3000', 'backend:8000',
+    'backend:3000', 'http://localhost']
 
 
 # Application definition
@@ -60,10 +63,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'SEARCH_PARAM': 'name',
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS':
+    'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 6,
 }
-
 
 
 DJOSER = {
@@ -113,13 +116,11 @@ TEMPLATES = [
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 
-
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     '127.0.0.1',
 ]
 CORS_URLS_REGEX = r'^/api/.*$'
-
 
 
 # Database

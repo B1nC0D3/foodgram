@@ -7,10 +7,10 @@ class IsAdminAuthorOrReadOnly(permissions.BasePermission):
         for group in request.user.groups.all():
             result.append(group.name)
         return(
-            request.method in permissions.SAFE_METHODS 
+            request.method in permissions.SAFE_METHODS
             or request.user == obj.author
             or 'admin' in result)
-        
+
     def has_permission(self, request, view):
         return (
             request.method in permissions.SAFE_METHODS

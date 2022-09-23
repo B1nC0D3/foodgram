@@ -1,14 +1,16 @@
-from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.models import Group, Permission
 from djoser.conf import settings
-from djoser.serializers import UserSerializer, UserCreateSerializer
+from djoser.serializers import UserCreateSerializer, UserSerializer
 from posts.models import Subscribe
+from rest_framework import serializers
 
 User = get_user_model()
 
+
 class CustomUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField()
+
     class Meta:
         fields = ('id', 'email', 'username', 'first_name', 'last_name', 'is_subscribed')
         model = User
@@ -18,6 +20,7 @@ class CustomUserSerializer(UserSerializer):
         if not user.is_authenticated:
             return False
         return Subscribe.objects.filter(author=obj, follower=user).exists()
+
 
 class TokenCreateSerializer(serializers.Serializer):
     password = serializers.CharField(required=False, style={"input_type": "password"})
@@ -47,12 +50,12 @@ class TokenCreateSerializer(serializers.Serializer):
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     def create(self, validated_data):
-        user =super().create(validated_data)
+        user = super().create(validated_data)
         group = Group.objects.get(name='user')
         user.groups.add(group)
         admin_group = Group.objects.get(name='admin')
         if not admin_group.permissions.all().exists():
-            admin_group.permissions.set(Permission.objects.all())        
+            admin_group.permissions.set(Permission.objects.all())
         return user
 
     class Meta:

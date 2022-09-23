@@ -1,16 +1,15 @@
-from rest_framework import viewsets, filters, status
-from rest_framework.permissions import IsAuthenticated
-from api.permissions import IsAdminAuthorOrReadOnly, IsAdminOrReadOnly
-from posts.models import Recipe, Ingredient, Tag, Favorite, Shopping_cart
 from api import serializers
-from rest_framework.decorators import action
 from api.filters import RecipeFilter
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.response import Response
+from api.permissions import IsAdminAuthorOrReadOnly, IsAdminOrReadOnly
 from django.http import HttpResponse
+from django_filters.rest_framework import DjangoFilterBackend
+from posts.models import Favorite, Ingredient, Recipe, Shopping_cart, Tag
+from rest_framework import filters, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 GET_REQUESTS = ['retrieve', 'list', 'destoy']
-
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -27,7 +26,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-    
+
     def _create_favorite(self, recipe, request):
         if Favorite.objects.filter(recipe=recipe, user=request.user).exists():
             return {'errors': 'Этот рецепт уже добавлен в избранное'}, status.HTTP_400_BAD_REQUEST
@@ -49,7 +48,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(data, status=status)
         data, status = self._delete_favorite(recipe, request)
         return Response(data, status=status)
-    
+
     def _add_to_shopping_cart(self, recipe, request):
         if Shopping_cart.objects.filter(recipe=recipe, user=request.user).exists():
             return {'errors': 'Вы уже добавили этот рецепт в корзину'}, status.HTTP_400_BAD_REQUEST
@@ -71,7 +70,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return Response(data, status=status)
         data, status = self._delete_from_shopping_cart(recipe, request)
         return Response(data, status=status)
-    
+
     @action(methods=('GET',), detail=False, permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
         recipes = Shopping_cart.objects.filter(user=request.user)
@@ -85,7 +84,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     ingredient_list[key] = ingredient.amount
                 else:
                     ingredient_list[key] += ingredient.amount
-            
+
         print(ingredient_list)
         result = open('Список покупок.txt', 'w+')
         for key, value in ingredient_list.items():

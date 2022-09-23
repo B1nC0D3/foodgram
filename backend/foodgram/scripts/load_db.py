@@ -1,5 +1,7 @@
-from posts.models import Ingredient
 import csv
+
+from posts.models import Ingredient
+
 
 def run():
     with open('ingredients.csv') as file:
