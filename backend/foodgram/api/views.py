@@ -1,4 +1,6 @@
-from rest_framework import viewsets, permissions, filters, status
+from rest_framework import viewsets, filters, status
+from rest_framework.permissions import IsAuthenticated
+from api.permissions import IsAdminAuthorOrReadOnly, IsAdminOrReadOnly
 from posts.models import Recipe, Ingredient, Tag, Favorite, Shopping_cart
 from api import serializers
 from rest_framework.decorators import action
@@ -15,7 +17,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = RecipeFilter
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (IsAdminAuthorOrReadOnly,)
 
     def get_serializer_class(self):
         if self.action in GET_REQUESTS:
@@ -39,7 +41,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         Favorite.objects.get(recipe=recipe, user=request.user).delete()
         return None, status.HTTP_204_NO_CONTENT
 
-    @action(methods=('POST', 'DELETE'), detail=True)
+    @action(methods=('POST', 'DELETE'), detail=True, permission_classes=(IsAuthenticated,))
     def favorite(self, request, pk=None):
         recipe = Recipe.objects.get(id=pk)
         if request.method == 'POST':
@@ -61,7 +63,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         Shopping_cart.objects.get(recipe=recipe, user=request.user).delete()
         return None, status.HTTP_204_NO_CONTENT
 
-    @action(methods=('POST', 'DELETE'), detail=True)
+    @action(methods=('POST', 'DELETE'), detail=True, permission_classes=(IsAuthenticated,))
     def shopping_cart(self, request, pk=None):
         recipe = Recipe.objects.get(id=pk)
         if request.method == 'POST':
@@ -70,7 +72,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         data, status = self._delete_from_shopping_cart(recipe, request)
         return Response(data, status=status)
     
-    @action(methods=('GET',), detail=False)
+    @action(methods=('GET',), detail=False, permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
         recipes = Shopping_cart.objects.filter(user=request.user)
         ingredient_list = {}
@@ -99,11 +101,11 @@ class IngredientsViewSet(viewsets.ModelViewSet):
     pagination_class = None
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (IsAdminOrReadOnly,)
 
 
 class TagsViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = serializers.TagsSerializer
     pagination_class = None
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (IsAdminOrReadOnly,)

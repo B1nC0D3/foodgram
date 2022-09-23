@@ -50,8 +50,8 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         user =super().create(validated_data)
         group = Group.objects.get(name='user')
         user.groups.add(group)
-        if User.objects.all().count() == 1:
-            admin_group = Group.objects.get(name='admin')
+        admin_group = Group.objects.get(name='admin')
+        if not admin_group.permissions.all().exists():
             admin_group.permissions.set(Permission.objects.all())        
         return user
 

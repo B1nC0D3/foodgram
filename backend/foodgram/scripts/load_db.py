@@ -1,4 +1,4 @@
-from posts.models import Ingredients
+from posts.models import Ingredient
 import csv
 
 def run():
@@ -7,7 +7,7 @@ def run():
         print(reader)
 
         for row in reader:
-            product = Ingredients(
+            product = Ingredient(
                 name=row[0],
                 measurement_unit=row[-1],
             )

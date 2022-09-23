@@ -4,13 +4,13 @@ from django.contrib.auth import get_user_model
 from rest_framework.response import Response
 from posts.models import Subscribe
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from api import serializers
 
 
 User = get_user_model()
 
 class CustomUserViewSet(UserViewSet):
-
     def _create_subsribe(self, author, request):
         if Subscribe.objects.filter(author=author, follower=request.user).exists():
             return {'errors': 'Вы уже подписаны на этого пользователя'}, status.HTTP_400_BAD_REQUEST
@@ -25,7 +25,7 @@ class CustomUserViewSet(UserViewSet):
         return None, status.HTTP_204_NO_CONTENT
 
 
-    @action(methods=('POST', 'DELETE'), detail=True)
+    @action(methods=('POST', 'DELETE'), detail=True, permission_classes=(IsAuthenticated,))
     def subscribe(self, request, id=None):
         author = User.objects.get(id=id)
         if request.method == 'POST':
@@ -34,7 +34,7 @@ class CustomUserViewSet(UserViewSet):
         data, status = self._delete_subscribe(author, request)
         return Response(data, status=status)
     
-    @action(methods=('GET',), detail=False)
+    @action(methods=('GET',), detail=False, permission_classes=(IsAuthenticated,))
     def subscriptions(self, request):
         subs = Subscribe.objects.filter(follower=request.user)
         page = self.paginate_queryset(subs)
