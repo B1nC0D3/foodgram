@@ -11,9 +11,9 @@ POST http://127.0.0.1:8000/api/users/
 Content-Type: application/json
 
 {
-"username": "admin",
+"username": "te111111st_111group",
 "password": "cjabz2007",
-"email": "asd@asd.com",
+"email": "asd@a111111s1111d111.com",
 "first_name": "Name",
 "last_name": "Surname"
 }

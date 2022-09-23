@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.models import Group, Permission
 from djoser.conf import settings
 from djoser.serializers import UserSerializer, UserCreateSerializer
 from posts.models import Subscribe
@@ -45,6 +46,15 @@ class TokenCreateSerializer(serializers.Serializer):
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
+    def create(self, validated_data):
+        user =super().create(validated_data)
+        group = Group.objects.get(name='user')
+        user.groups.add(group)
+        if User.objects.all().count() == 1:
+            admin_group = Group.objects.get(name='admin')
+            admin_group.permissions.set(Permission.objects.all())        
+        return user
+
     class Meta:
         fields = tuple(User.REQUIRED_FIELDS) + (
             settings.LOGIN_FIELD,
