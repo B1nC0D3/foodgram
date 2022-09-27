@@ -13,15 +13,20 @@ User = get_user_model()
 class CustomUserViewSet(UserViewSet):
     def _create_subsribe(self, author, request):
         if Subscribe.objects.filter(author=author, follower=request.user).exists():
-            return {'errors': 'Вы уже подписаны на этого пользователя'}, status.HTTP_400_BAD_REQUEST
+            return (
+                {'errors': 'Вы уже подписаны на этого пользователя'}, 
+                status.HTTP_400_BAD_REQUEST)
         subscribe = Subscribe.objects.create(author=author, follower=request.user)
         serializer = serializers.SubscribeSerializer(subscribe, context={'request': request})
         return serializer.data, None
 
     def _delete_subscribe(self, author, request):
-        if not Subscribe.objects.filter(author=author, follower=request.user).exists():
-            return {'errors': 'Вы уже отписались от этого пользователя'}, status.HTTP_400_BAD_REQUEST
-        Subscribe.objects.get(author=author, follower=request.user).delete()
+        subscribe = Subscribe.objects.filter(author=author, follower=request.user)
+        if not subscribe.exists():
+            return (
+                {'errors': 'Вы уже отписались от этого пользователя'}, 
+                status.HTTP_400_BAD_REQUEST)
+        subscribe.delete()
         return None, status.HTTP_204_NO_CONTENT
 
     @action(methods=('POST', 'DELETE'), detail=True, permission_classes=(IsAuthenticated,))
@@ -42,5 +47,4 @@ class CustomUserViewSet(UserViewSet):
             serializer = serializers.SubscribeSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         serializer = serializers.SubscribeSerializer(subs, many=True)
-
         return Response(serializer.data, status=status.HTTP_200_OK)

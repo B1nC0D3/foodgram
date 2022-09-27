@@ -26,8 +26,8 @@ class TokenCreateSerializer(serializers.Serializer):
     password = serializers.CharField(required=False, style={"input_type": "password"})
 
     default_error_messages = {
-        "invalid_credentials": settings.CONSTANTS.messages.INVALID_CREDENTIALS_ERROR,
-        "inactive_account": settings.CONSTANTS.messages.INACTIVE_ACCOUNT_ERROR,
+        'invalid_credentials': settings.CONSTANTS.messages.INVALID_CREDENTIALS_ERROR,
+        'inactive_account': settings.CONSTANTS.messages.INACTIVE_ACCOUNT_ERROR,
     }
 
     def __init__(self, *args, **kwargs):
@@ -40,11 +40,11 @@ class TokenCreateSerializer(serializers.Serializer):
             self.fail('invalid_credentials')
         username = User.objects.get(email=attrs.get('email'))
         self.user = authenticate(
-            username=username.username, password=attrs.get("password")
+            username=username.username, password=attrs.get('password')
         )
 
         if not self.user:
-            self.fail("invalid_credentials")
+            self.fail('invalid_credentials')
         return attrs
 
 
@@ -54,7 +54,8 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         group = Group.objects.get(name='user')
         user.groups.add(group)
         admin_group = Group.objects.get(name='admin')
-        if not admin_group.permissions.all().exists():
+        admin_permissions = admin_group.permissions.all()
+        if not admin_permissions.exists():
             admin_group.permissions.set(Permission.objects.all())
         return user
 

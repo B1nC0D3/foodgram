@@ -1,4 +1,5 @@
 import django_filters
+from django.db.utils import OperationalError
 from posts.models import Recipe, Tag
 
 
@@ -9,7 +10,7 @@ def _get_choices():
         for tag in tags:
             result.append((tag.name, tag.name))
         return result
-    except Exception:
+    except OperationalError:
         return (None, None)
 
 
@@ -28,15 +29,17 @@ class RecipeFilter(django_filters.FilterSet):
     def get_is_favorited(self, queryset, name, value):
         remove_recipes = []
         for recipe in queryset:
-            check_fav = recipe.recipe.filter(user=self.request.user)
-            if len(check_fav) == 0:
+            check_fav = recipe.recipes.filter(
+                user=self.request.user).count()
+            if check_fav == 0:
                 remove_recipes.append(recipe.id)
         return Recipe.objects.exclude(id__in=remove_recipes)
 
     def get_is_in_shopping_cart(self, queryset, name, value):
         remove_recipes = []
         for recipe in queryset:
-            check_in_cart = recipe.shop_recipe.filter(user=self.request.user)
-            if len(check_in_cart) == 0:
+            check_in_cart = recipe.shop_recipe.filter(
+                user=self.request.user).count
+            if check_in_cart == 0:
                 remove_recipes.append(recipe.id)
         return Recipe.objects.exclude(id__in=remove_recipes)
