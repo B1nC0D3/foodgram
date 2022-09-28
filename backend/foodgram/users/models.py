@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+ADMIN_ROLE = 'admin'
 
 class User(AbstractUser):
     email = models.EmailField(
@@ -29,4 +30,4 @@ class User(AbstractUser):
         result = []
         for group in self.groups.all():
             result.append(group.name)
-        return 'admin' in result
+        return ADMIN_ROLE in result

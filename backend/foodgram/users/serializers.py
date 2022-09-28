@@ -63,7 +63,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         fields = tuple(User.REQUIRED_FIELDS) + (
             settings.LOGIN_FIELD,
             settings.USER_ID_FIELD,
-            "password",
+            'password',
             'first_name',
             'last_name'
         )

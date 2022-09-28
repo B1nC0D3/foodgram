@@ -2,13 +2,14 @@ import base64
 
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
+from django.db import transaction
+from foodgram import settings
 from foodgram.settings import MEDIA_URL
 from posts.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
                           Shopping_cart, Subscribe, Tag, TagRecipe)
 from rest_framework import serializers
-from users.serializers import CustomUserSerializer
 from rest_framework.validators import UniqueTogetherValidator
-from django.db import transaction
+from users.serializers import CustomUserSerializer
 
 User = get_user_model()
 
@@ -73,13 +74,13 @@ class GetRecipesSerializer(serializers.ModelSerializer):
         model = Recipe
 
     def validate(self, data):
-        if data.get('cooking_time') < 1:
+        if data.get('cooking_time') < settings.COOKING_TIME_MIN:
             raise serializers.ValidationError(
-                'Время приготовления должно быть больше нуля')
+                f'Время приготовления должно быть больше {settings.COOKING_TIME_MIN}')
         for ingredient in data.get('amount'):
-            if ingredient.get('amount') < 1:
+            if ingredient.get('amount') < settings.AMOUNT_MIN:
                 raise serializers.ValidationError(
-                    'Количество ингредиентов должно быть больше нуля'
+                    f'Количество ингредиентов должно быть больше {settings.AMOUNT_MIN}'
                 )    
         return data
 

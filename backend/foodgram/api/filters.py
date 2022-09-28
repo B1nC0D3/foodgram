@@ -4,14 +4,12 @@ from posts.models import Recipe, Tag
 
 
 def _get_choices():
-    try:
-        tags = Tag.objects.all()
-        result = []
-        for tag in tags:
-            result.append((tag.name, tag.name))
-        return result
-    except OperationalError:
-        return (None, None)
+    tags = Tag.objects.all()
+    result = []
+    for tag in tags:
+        result.append((tag.name, tag.name))
+    return result
+    
 
 
 class RecipeFilter(django_filters.FilterSet):

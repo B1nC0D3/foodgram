@@ -1,15 +1,15 @@
 from api import serializers
 from api.filters import RecipeFilter
 from api.permissions import IsAdminAuthorOrReadOnly, IsAdminOrReadOnly
-from django.http import HttpResponse
 from django.db.models import Sum
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
-from posts.models import Favorite, Ingredient, Recipe, Shopping_cart, Tag, RecipeIngredient
+from posts.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
+                          Shopping_cart, Tag)
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-
 
 GET_REQUESTS = ['retrieve', 'list', 'destoy']
 
@@ -29,9 +29,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
     def _create_favorite(self, recipe, request):
-        Favorite.objects.all().delete()
-        # if Favorite.objects.filter(recipe=recipe, user=request.user).exists():
-        #     return {'errors': 'Этот рецепт уже добавлен в избранное'}, status.HTTP_400_BAD_REQUEST
+        if Favorite.objects.filter(recipe=recipe, user=request.user).exists():
+            return (
+                {'errors': 'Этот рецепт уже добавлен в избранное'}, 
+                status.HTTP_400_BAD_REQUEST)
         fav = Favorite.objects.create(recipe=recipe, user=request.user)
         serializer = serializers.FavoriteSerializer(fav, context={'request': request})
         return serializer.data, status.HTTP_201_CREATED
@@ -39,7 +40,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def _delete_favorite(self, recipe, request):
         favorite = Favorite.objects.filter(recipe=recipe, user=request.user)
         if not favorite.exists():
-            return {'errors': 'Вы уже удалили этот рецепт из избранного'}, status.HTTP_400_BAD_REQUEST
+            return (
+                {'errors': 'Вы уже удалили этот рецепт из избранного'}, 
+                status.HTTP_400_BAD_REQUEST)
         favorite.delete()
         return None, status.HTTP_204_NO_CONTENT
 
@@ -90,15 +93,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipes = Shopping_cart.objects.filter(user=request.user)
         ingredient_list = {}
         cart_recipes = []
+        ingredient_recipe = set()
         for recipe in recipes:
             ingredients = recipe.recipe.amount.all()
             cart_recipes.append(recipe.recipe)
             for ingredient in ingredients:
+                ingredient_recipe.add(ingredient.ingredient)
+            for ingredient in ingredient_recipe:
                 amount = RecipeIngredient.objects.filter(
                     recipe__in=cart_recipes, ingredient=ingredient.ingredient).aggregate(Sum('amount'))
                 key = f'{ingredient.ingredient.name} ({ingredient.ingredient.measurement_unit})'
                 ingredient_list[key] = amount['amount__sum']
-
+    
         result = HttpResponse(status=status.HTTP_200_OK, content_type='text/plain')
         for key, value in ingredient_list.items():
             result.write(f'{key} - {value} \n')

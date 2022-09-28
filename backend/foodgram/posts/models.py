@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.db import models
 from django.core.validators import MinValueValidator
+from django.db import models
+from foodgram import settings
+
 User = get_user_model()
 
 
@@ -86,9 +88,9 @@ class Recipe(models.Model):
         help_text='Выберите тэги'
     )
     cooking_time = models.PositiveSmallIntegerField(
-        validators=(MinValueValidator(1),),
+        validators=(MinValueValidator(settings.COOKING_TIME_MIN),),
         verbose_name='Время приготовления',
-        help_text='Введите время приготовления, больше 0'
+        help_text=f'Введите время приготовления, больше {settings.COOKING_TIME_MIN}'
     )
 
     class Meta:
@@ -114,15 +116,18 @@ class RecipeIngredient(models.Model):
         help_text='Выберите рецепт'
     )
     amount = models.PositiveSmallIntegerField(
-        validators=(MinValueValidator(1),),
+        validators=(MinValueValidator(settings.AMOUNT_MIN),),
         verbose_name='Количество ингредиентов',
-        help_text='Введите число, больше 0'
+        help_text=f'Введите число, больше {settings.AMOUNT_MIN}'
     )
 
     class Meta:
         ordering = ('id',)
         verbose_name = 'Ингредиенты'
         verbose_name_plural = 'Ингредиенты'
+
+    def __str__(self) -> str:
+        return f'{self.ingredient} принадлежащий {self.recipe}'
 
 
 class TagRecipe(models.Model):
@@ -142,6 +147,9 @@ class TagRecipe(models.Model):
         ordering = ('id',)
         verbose_name = 'Тэги'
         verbose_name_plural = 'Тэги'
+
+    def __str__(self) -> str:
+        return f'{self.tag} принадлежащий {self.recipe}'
 
 
 class Favorite(models.Model):
@@ -164,6 +172,9 @@ class Favorite(models.Model):
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранное'
 
+    def __str__(self) -> str:
+        return f'{self.recipe} в избранном у {self.user}'
+        
 
 class Subscribe(models.Model):
     author = models.ForeignKey(
@@ -185,6 +196,8 @@ class Subscribe(models.Model):
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки'
 
+    def __str__(self) -> str:
+        return f'{self.follower} подписан на {self.author}'
 
 class Shopping_cart(models.Model):
     recipe = models.ForeignKey(
@@ -205,3 +218,6 @@ class Shopping_cart(models.Model):
         ordering = ('id',)
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзина'
+    
+    def __str__(self) -> str:
+        return f'{self.recipe} в корзине у {self.user}'
