@@ -25,7 +25,8 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 'TRUE'
+
+DEBUG = os.getenv('DEBUG') == 'True'
 
 COOKING_TIME_MIN = 1
 AMOUNT_MIN = 1
@@ -126,18 +127,14 @@ CORS_URLS_REGEX = r'^/api/.*$'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    # 'default': {
-    #     'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
-    #     'NAME': os.getenv('DB_NAME', 'postgres'),
-    #     'USER': os.getenv('POSTGRES_USER', 'postgres'),
-    #     'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
-    #     'HOST': os.getenv('DB_HOST', 'db'),
-    #     'PORT': os.getenv('DB_PORT', 5432)
-    # },
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'mydatabase',
-    }
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', 'postgres'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', 5432)
+    },
 }
 
 

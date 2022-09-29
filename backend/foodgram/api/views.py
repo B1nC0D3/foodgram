@@ -1,6 +1,6 @@
 from api import serializers
 from api.filters import RecipeFilter
-from api.permissions import IsAdminAuthorOrReadOnly, IsAdminOrReadOnly
+from api.permissions import IsAdminAuthorOrReadOnly
 from django.db.models import Sum
 from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
@@ -11,7 +11,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-GET_REQUESTS = ['retrieve', 'list', 'destoy']
+GET_SERIALIZER_REQUESTS = ['retrieve', 'list', 'destroy']
+CONTENT_TYPE = 'text/plain'
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -21,7 +22,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminAuthorOrReadOnly,)
 
     def get_serializer_class(self):
-        if self.action in GET_REQUESTS:
+        if self.action in GET_SERIALIZER_REQUESTS:
             return serializers.GetRecipesSerializer
         return serializers.PostRecipesSerializer
 
@@ -90,24 +91,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(methods=('GET',), detail=False, permission_classes=(IsAuthenticated,))
     def download_shopping_cart(self, request):
-        recipes = Shopping_cart.objects.filter(user=request.user)
-        ingredient_list = {}
-        cart_recipes = []
-        ingredient_recipe = set()
-        for recipe in recipes:
-            ingredients = recipe.recipe.amount.all()
-            cart_recipes.append(recipe.recipe)
-            for ingredient in ingredients:
-                ingredient_recipe.add(ingredient.ingredient)
-            for ingredient in ingredient_recipe:
-                amount = RecipeIngredient.objects.filter(
-                    recipe__in=cart_recipes, ingredient=ingredient.ingredient).aggregate(Sum('amount'))
-                key = f'{ingredient.ingredient.name} ({ingredient.ingredient.measurement_unit})'
-                ingredient_list[key] = amount['amount__sum']
-    
-        result = HttpResponse(status=status.HTTP_200_OK, content_type='text/plain')
-        for key, value in ingredient_list.items():
-            result.write(f'{key} - {value} \n')
+        result = HttpResponse(status=status.HTTP_200_OK, content_type=CONTENT_TYPE)
+        ingredients = RecipeIngredient.objects.filter(
+            recipe__shop_recipe__user=request.user).values(
+            'ingredient__name',
+            'ingredient__measurement_unit'
+        ).annotate(amount=Sum('amount')).order_by()
+        print(ingredients)
+        for ingredient in ingredients:
+            result.write(
+                f'{ingredient["ingredient__name"]}' 
+                f' ({ingredient["ingredient__measurement_unit"]}) - {ingredient["amount"]} \n')
         return result 
 
 
