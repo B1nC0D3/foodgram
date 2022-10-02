@@ -4,11 +4,14 @@ from posts.models import Recipe, Tag
 
 
 def _get_choices():
-    tags = Tag.objects.all()
-    result = []
-    for tag in tags:
-        result.append((tag.name, tag.name))
-    return result
+    try:
+        tags = Tag.objects.all()
+        result = []
+        for tag in tags:
+            result.append((tag.name, tag.name))
+        return result
+    except Exception:
+        return (None, None)
     
 
 
