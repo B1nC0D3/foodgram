@@ -30,7 +30,7 @@ DEBUG = os.getenv('DEBUG') == 'True'
 
 COOKING_TIME_MIN = 1
 AMOUNT_MIN = 1
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(' ')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 
 # Application definition
