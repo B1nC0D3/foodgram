@@ -17,7 +17,7 @@ def _get_choices():
 
 class RecipeFilter(django_filters.FilterSet):
     tags = django_filters.MultipleChoiceFilter(
-        field_name='tags__name', choices=_get_choices())
+        field_name='tags__slug', choices=_get_choices())
     is_favorited = django_filters.NumberFilter(
         field_name='is_favorited', method='get_is_favorited')
     is_in_shopping_cart = django_filters.NumberFilter(
