@@ -4,14 +4,12 @@ from users.models import User
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'email', 'get_group')
-    list_filter = ('email', 'username')
+    list_display = ('id', 'username', 'email', 'is_admin', 'is_superuser')
+    search_fields = ('email', 'username')
 
-    def get_group(self, obj):
-        result = []
-        for group in obj.groups.all():
-            result.append(group.name)
-        return result
-
+    def is_admin(self, obj):
+        if obj.is_admin:
+            return 'Да'
+        return 'Нет'
 
 admin.site.register(User, UserAdmin)

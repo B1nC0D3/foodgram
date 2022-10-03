@@ -134,7 +134,8 @@ class PostRecipesSerializer(GetRecipesSerializer):
         instance.name = validated_data['name']
         instance.text = validated_data['text']
         instance.cooking_time = validated_data['cooking_time']
-        instance.image = validated_data['image']
+        if 'image' in validated_data:
+            instance.image = validated_data['image']
         ingredients = validated_data.pop('amount')
         tags = validated_data.pop('tags')
         TagRecipe.objects.filter(recipe=instance).delete()

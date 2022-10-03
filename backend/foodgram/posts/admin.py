@@ -1,6 +1,6 @@
 from django.contrib import admin
 from posts.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
-                          Subscribe, Tag, TagRecipe)
+                          Subscribe, Tag, TagRecipe, Shopping_cart)
 
 
 class IngredientInline(admin.TabularInline):
@@ -37,18 +37,27 @@ class TagAdmin(admin.ModelAdmin):
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'measurement_unit')
     search_fields = ('name', )
+    list_filter = ('measurement_unit',)
 
 
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('recipe', 'user')
+    search_fields = ('recipe__name', 'user__username', 'user__email')
+    list_filter = ('recipe__tags',)
 
 
 class SubscribeAdmin(admin.ModelAdmin):
     list_display = ('author', 'follower')
+    search_fields = ('follower__username', 'follower__email')
 
+
+class ShoppingCartAdmin(admin.ModelAdmin):
+    list_display = ('recipe', 'user')
+    search_fields = ('user__username', 'user__email', 'recipe__name')
 
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(Subscribe, SubscribeAdmin)
+admin.site.register(Shopping_cart, ShoppingCartAdmin)

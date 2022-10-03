@@ -8,7 +8,7 @@ def _get_choices():
         tags = Tag.objects.all()
         result = []
         for tag in tags:
-            result.append((tag.name, tag.name))
+            result.append((tag.slug, tag.slug))
         return result
     except Exception:
         return (None, None)
