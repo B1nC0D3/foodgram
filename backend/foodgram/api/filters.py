@@ -25,7 +25,7 @@ class RecipeFilter(django_filters.FilterSet):
 
     class Meta:
         model = Recipe
-        fields = ('tags', 'author', 'is_favorited')
+        fields = ('tags', 'author', 'is_favorited', 'is_in_shopping_cart')
 
     def get_is_favorited(self, queryset, name, value):
         remove_recipes = []
@@ -39,8 +39,10 @@ class RecipeFilter(django_filters.FilterSet):
     def get_is_in_shopping_cart(self, queryset, name, value):
         remove_recipes = []
         for recipe in queryset:
+            print(recipe.shop_recipe.filter(user=self.request.user), '=================')
             check_in_cart = recipe.shop_recipe.filter(
-                user=self.request.user).count
+                user=self.request.user).count()
             if check_in_cart == 0:
                 remove_recipes.append(recipe.id)
+        print(Recipe.objects.exclude(id__in=remove_recipes), '=========')
         return Recipe.objects.exclude(id__in=remove_recipes)
